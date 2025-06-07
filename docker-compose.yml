@@ -1,0 +1,78 @@
+services:
+  database:
+    image: postgres:14-alpine
+    container_name: blog_db
+    restart: always
+    environment:
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_DB: ${POSTGRES_DB}
+    volumes:
+      - postgres_data:/var/lib/postgresql/data
+
+  auth-service:
+    build: ./services/auth-service
+    container_name: blog_auth_service
+    restart: always
+    environment:
+      POSTGRES_HOST: database
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_DB: ${POSTGRES_DB}
+      JWT_SECRET: ${JWT_SECRET}
+      PORT: 4000
+    depends_on:
+      - database
+
+  api-gateway:
+    build: ./services/api-gateway
+    container_name: blog_api_gateway
+    restart: always
+    environment:
+      POSTGRES_HOST: database
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_DB: ${POSTGRES_DB}
+      JWT_SECRET: ${JWT_SECRET}
+      PORT: 5000
+      FEDERATION_SERVICE_URL: http://federation-service:6000
+    depends_on:
+      - database
+      - auth-service
+
+  frontend-app:
+    build: ./services/frontend-app
+    container_name: blog_frontend_app
+    restart: always
+    depends_on:
+      - api-gateway
+      - auth-service
+
+  federation-service:
+    build: ./services/federation-service
+    container_name: blog_federation_service
+    restart: always
+    environment:
+      POSTGRES_HOST: database
+      POSTGRES_USER: ${POSTGRES_USER}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_DB: ${POSTGRES_DB}
+      # --- ADD THIS LINE ---
+      INSTANCE_HOSTNAME: ${INSTANCE_HOSTNAME}
+    depends_on:
+      - database
+
+  reverse-proxy:
+    build: ./reverse-proxy
+    container_name: blog_reverse_proxy
+    restart: always
+    ports:
+      - "80:80"
+    depends_on:
+      - frontend-app
+      - api-gateway
+      - auth-service
+      - federation-service
+
+volumes:
+  postgres_data:
