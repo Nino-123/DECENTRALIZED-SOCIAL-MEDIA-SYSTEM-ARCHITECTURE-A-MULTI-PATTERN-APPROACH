@@ -5,6 +5,25 @@
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <meta name="theme-color" content="#000000" />
     <title>DeBlog - A Decentralized Blog</title>
+    
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- ADD THIS CONFIGURATION SCRIPT -->
+    <script>
+      tailwind.config = {
+        darkMode: 'class', // This enables the manual, class-based dark mode
+      }
+    </script>
+    
+    <style>
+      body {
+        background-color: #f3f4f6; /* A light gray from Tailwind's color palette */
+      }
+      /* When dark mode is active, change the background color */
+      html.dark body {
+        background-color: #111827; /* A dark gray from Tailwind's palette */
+      }
+    </style>
   </head>
   <body>
     <noscript>You need to enable JavaScript to run this app.</noscript>
