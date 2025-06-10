@@ -63,17 +63,25 @@ cd DeBlog
    Create a `.env` file in the project root:
 
 ```bash
-cp .env.example .env
+.env
 ```
 
 Edit the values in `.env` as needed:
 
 ```env
+# .env
+# NEVER commit this file to version control.
+
+# --- PostgreSQL Database Configuration ---
 POSTGRES_USER=blogadmin
-POSTGRES_PASSWORD=your_super_secret_db_password
+POSTGRES_PASSWORD=lollmaoxd
 POSTGRES_DB=blog_platform
-JWT_SECRET=your_super_secret_jwt_key_32_chars_long
-INSTANCE_HOSTNAME=your_public_ip_or_domain
+INSTANCE_HOSTNAME=localhost
+
+# --- Auth Service Configuration ---
+# Use a long, random, and secret string for production.
+# You can generate one using: openssl rand -base64 32
+JWT_SECRET=QMadMUO0/D9UuZjhlypbVixijaDKJyXvWztc2SknFLM=
 ```
 
 3. **Build and Launch the Application**
