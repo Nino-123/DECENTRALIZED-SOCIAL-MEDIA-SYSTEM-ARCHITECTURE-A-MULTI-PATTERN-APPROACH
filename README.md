@@ -142,4 +142,4 @@ To test DeBlog's decentralized federation:
 
 ## 📖 License
 
-This project is intended for educational use and prototyping. See `LICENSE` file for details.
+This project is intended for educational use and prototyping.
