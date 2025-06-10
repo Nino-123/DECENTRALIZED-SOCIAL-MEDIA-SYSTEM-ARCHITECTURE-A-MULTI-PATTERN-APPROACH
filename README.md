@@ -40,7 +40,7 @@ DeBlog uses a 6-container microservice architecture, optimized for modularity an
 | `federation-service` | FastAPI-based microservice for peer communication                  |
 | `database`           | PostgreSQL datastore                                               |
 
-
+```bash
 Frontend (Web UI)         Backend Services                          Databases / Storage
 
 ┌─ frontend-app           ┌─ auth-service       (localhost:8001)    ┌─ userdb      (PostgreSQL: 5432)
@@ -54,12 +54,14 @@ Frontend (Web UI)         Backend Services                          Databases / 
                                                     • Routes /api/auth → auth-service
                                                     • /api/* → api-gateway
                                                     • Federation callbacks → federation-service
+```
 
 
 ---
 
 ## 📂 Project Structure
 
+```bash
 decentralized-social-media/
 ├─ docker-compose.yml        # Orchestrates all services
 ├─ README.md                 # Project documentation
@@ -86,6 +88,8 @@ decentralized-social-media/
 │   ├─ peers.py            # Send outbound posts
 │   └─ Dockerfile
 └─ database/               # PostgreSQL (launched via Docker Compose)
+
+```
 
 ---
 
