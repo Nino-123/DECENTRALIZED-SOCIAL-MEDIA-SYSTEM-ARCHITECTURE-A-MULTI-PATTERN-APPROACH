@@ -109,4 +109,4 @@ To test the decentralized federation, you need at least two running instances of
 
 ## Group Members
 * Muhammad Razan Alamudi (23/511396/PA/21784)
-* Satwika Nino Wandhana 23/516202/PA/22066
+* Satwika Nino Wandhana (23/516202/PA/22066)
