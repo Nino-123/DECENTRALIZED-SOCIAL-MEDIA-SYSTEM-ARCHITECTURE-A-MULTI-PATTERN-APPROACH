@@ -40,6 +40,53 @@ DeBlog uses a 6-container microservice architecture, optimized for modularity an
 | `federation-service` | FastAPI-based microservice for peer communication                  |
 | `database`           | PostgreSQL datastore                                               |
 
+
+Frontend (Web UI)         Backend Services                          Databases / Storage
+
+┌─ frontend-app           ┌─ auth-service       (localhost:8001)    ┌─ userdb      (PostgreSQL: 5432)
+│  (React, Tailwind)      │  • JWT signup/login │                    │
+│                         │                      ├─ api-gateway   (localhost:8002) ─── PostgreSQL / Peers & Posts
+│  • Users login          │                      │
+│  • Write posts          ├─ federation-service (localhost:8003)    └─ media storage (if included)
+│  • View feeds           │  • HTTPX → peers    │
+└─────────────────────────┘                      │
+                                                 └─ reverse-proxy (Nginx: 80/443)
+                                                    • Routes /api/auth → auth-service
+                                                    • /api/* → api-gateway
+                                                    • Federation callbacks → federation-service
+
+
+---
+
+## 📂 Project Structure
+
+decentralized-social-media/
+├─ docker-compose.yml        # Orchestrates all services
+├─ README.md                 # Project documentation
+├─ frontend-app/            # React SPA
+│   ├─ src/
+│   │   ├─ App.js           # Main UI
+│   │   ├─ components/      # UI pieces: PostForm, Feed, PeerList, DarkModeToggle
+│   │   └─ api/             # Frontend API clients (auth.js, posts.js, federation.js)
+│   └─ package.json
+├─ auth-service/            # Node.js + Express + JWT
+│   ├─ routes.js           # /register, /login
+│   ├─ auth.js             # JWT logic & middleware
+│   ├─ models.js           # User schema for PostgreSQL
+│   └─ Dockerfile
+├─ api-gateway/            # Node.js + Express
+│   ├─ routes/
+│   │   ├─ posts.js        # Create, delete posts
+│   │   ├─ users.js        # Profile endpoints
+│   │   └─ peers.js        # Manage peer instances
+│   ├─ federation-client.js# RPC to federation service
+│   └─ Dockerfile
+├─ federation-service/     # Python + FastAPI + HTTPX
+│   ├─ main.py             # /incoming-post endpoint
+│   ├─ peers.py            # Send outbound posts
+│   └─ Dockerfile
+└─ database/               # PostgreSQL (launched via Docker Compose)
+
 ---
 
 ## 🚪 Getting Started
